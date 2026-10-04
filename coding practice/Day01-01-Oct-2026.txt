@@ -1,6 +1,7 @@
 #Ansible Task - Install nginx on pathnex server
 
 
+
     - name: Install nginx on pathnex server 
       hosts: all 
       become: yes
