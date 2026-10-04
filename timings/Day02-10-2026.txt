@@ -1,42 +1,40 @@
-
-
 ## I have gone through below linux topics and commands  today.
 
-- linux commands 
-		- ls 
-		- ls -l
-		- ls -al
-		- ls -altr
-		- ls -alSh
-
-	- linux permissions 
-		- users group owner 
-		- 4 2 1 read write execute 
-		- directory and files 
-		- 755 and 644 are the highest permisssions given to directories and files respectively
-		- execute means that you are able to run or execute a file 
-		- and inside the directory you are able to run commands 
-		- inodes 
-		- hardlink and soft link
-		- hardlink means that source and destination files are pointing to the same inode number and if the source file gets 
-            deleted then data can be recovered 
-        - while in softlink two different files source and destination points to different inode numbers so if source file gets deleted then we can't recover the data.
-        - so inode number is basically something which holds the metadata information like timestamps size userid groupid etc and the information of where the data is stored on the disk
-		- umask is basically a permission restrictor which is responsible for providing the default permissions to file and directory after its creation
-		- sudo is used to provide admin priviledges to a non-root user 
-		- how to add non-root user to sudo group. This we can do by adding the non-root user to wheel group by two methods 
-		- how to configure /etc/hostname
-		- how to add user into wheel group 
-        - one is if a non-root user is logged in then it must be already added to the wheelgroup or sudo group then only it can run --> sudo usermod -aG sudo username
-        - other way is by configuring the /etc/sudoers file and adding the name of the non-root username 
-        - the user who is not a part of the sudo group can't add a user to sudo group or run sudo commands 
-		- chmod is used to modify the permissions of file/directory
-		- chown is used to change the group and user ownership of a file or directory 
-		- useradd is used to add user non-interactively means it won't ask for password and other info during user creation 
-		- adduser is also used to add user but is interactive 
-		- su - this is used to switch user to its home directory 
+# linux commands 
+- ls 
+- ls -l
+- ls -al
+- ls -altr
+- ls -alSh
+- linux permissions 
+- users group owner 
+- 4 2 1 read write execute 
+- directory and files 
+- 755 and 644 are the highest permisssions given to directories and files respectively
+- execute means that you are able to run or execute a file 
+- and inside the directory you are able to run commands 
+- inodes 
+- hardlink and soft link
+- hardlink means that source and destination files are pointing to the same inode number and if the source file gets deleted then data can be recovered 
+- while in softlink two different files source and destination points to different inode numbers so if source file gets deleted then we can't recover the data.
+- so inode number is basically something which holds the metadata information like timestamps size userid groupid etc and the information of where the data is stored on the disk
+- umask is basically a permission restrictor which is responsible for providing the default permissions to file and directory after its creation
+- sudo is used to provide admin priviledges to a non-root user 
+- how to add non-root user to sudo group. This we can do by adding the non-root user to wheel group by two methods 
+- how to configure /etc/hostname
+- how to add user into wheel group 
+- one is if a non-root user is logged in then it must be already added to the wheelgroup or sudo group then only it can run --> sudo usermod -aG sudo username
+- other way is by configuring the /etc/sudoers file and adding the name of the non-root username 
+- the user who is not a part of the sudo group can't add a user to sudo group or run sudo commands 
+- chmod is used to modify the permissions of file/directory
+- chown is used to change the group and user ownership of a file or directory 
+- useradd is used to add user non-interactively means it won't ask for password and other info during user creation 
+- adduser is also used to add user but is interactive 
+- su - this is used to switch user to its home directory 
 
     
 ## I practiced  to speak in english for 1 hour 
 ## I practiced for the evening introduction.
 ## I practiced writing the code for ansible, terraform, kubernetes, docker ,bash.
+
+ 
