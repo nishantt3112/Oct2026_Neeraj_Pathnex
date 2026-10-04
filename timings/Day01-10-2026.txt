@@ -1,8 +1,0 @@
-
-
-I did below things today.
-
-* I gone through the OSI model.
-* I gone through the Private and Public IPs where they are used and their IP classes.
-* I gone through the DNS and its working.
-* I tried to speak in English for an hour.
