@@ -1,0 +1,87 @@
+#################################################
+# ANSIBLE - Install Apache and start service 
+
+--- 
+
+- name: Install and Start Apache service 
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install httpd
+      ansible.builtin.yum:
+        name: httpd 
+        state: present 
+      
+    - name: Start Apache service 
+      ansible.builtin.service:
+        name: httpd 
+        state: started 
+        enabled: yes 
+
+
+#################################################
+# TERRAFORM - provision EC2 on AWS 
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "PathnexEC2" {
+  ami = "ami-0abcd1234abcd1234"
+  instance_type = "t3.medium"
+
+  tags = {
+    Name = "Pathnex-T3"
+  }
+}
+
+#################################################
+# KUBERNETES -  ReplicaSet
+
+--- 
+apiVersion: apps/v1
+kind: ReplicaSet 
+metadata:
+  name: pathnex-replicaset 
+
+spec:
+  replicas: 3 
+  selector: 
+    matchLabels:
+      app: pathnex-app 
+  
+  template:
+    metadata:
+      labels: 
+        app: pathenx-app 
+    spec: 
+      containers: 
+      - name: app 
+        image: nginx 
+        ports:
+          - containerPort: 80
+
+---
+
+#################################################
+# SHELL SCRIPT 
+
+#!/bin/bash
+
+#User info
+
+echo "Current User: $(whoami)"
+echo "Currentusergroups: $(group)"
+
+
+#################################################
+# DOCKERFILE
+
+#Dockerfile for nginx 
+
+FROM nginx:latest 
+
+COPY index.html /usr/share/nginx/html/index.html 
+
+

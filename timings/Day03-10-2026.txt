@@ -1,0 +1,31 @@
+## I have gone through below linux topics and commands  today.
+
+# linux commands 
+- inode
+- soft link and hardlink
+- du -f this is used to check the disk usage by a files/directories inside a directory 
+- df -h this is used to check the disk space utilization at the filesystem level
+- /etc/fstab this is the file which contains the information about like which devices of the filesystem are mounted onto which directories  
+- tar gzip etc these are the commands used to compress and decompress files and folders example lets say there are millions of logs generated inside a log file so the size gets larger with respect to time so we can continously monitors the log file and compress the file using tar -cvf archivefile.tar sourcefile to uncompress tar -xvf app.tar
+
+- cpu can be used more than 100% 
+  ans: yes it depends on the linux CPU cores if there are 4 cores then CPU usage can go upto 400% so this is calculated on the basis of CPU utilization/core
+- load average ? 
+  ans: this means how much load or pressure is on the system and linux kernel calculates it for last one ,5 and 15 minutes.
+- top command - this is used to check the current running processes PIDs CPU utilization memory utilization loadaverage etc. it is like a live health monitoring of the system 
+- ps aux  is used to check the process their pids of all users and many other flags can be used along with this ps command.
+- kill -9 - this is used when we want to kill forcefull a process using a PID so this sends a kill signal
+
+- find command is used to search a file or directory inside the filesystem we can use several flags along with it 
+- find . -type f -mtime +3 -exec du -h {} + | sort -rh | head -10
+- this above command is use to find in the current location with regular file type and -mtime means files which are not modified for last 3 days +3 and then run a commmand -exec on the data and then will sort it in human readable reverse format and only show the top 10 lines using head -10
+- netstat -tnlup this command is used to see which ports are used by which processes , tcp or udp etc 
+- netstat is depercated now and ss is socket statistics command is now used to see the network connection on server like what ports are opened or not on the server 
+
+
+    
+## I practiced  to speak in english for 1 hour 
+## I practiced for the evening introduction.
+## I practiced writing the code for ansible, terraform, kubernetes, docker ,bash.
+
+ 
