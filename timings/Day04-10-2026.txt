@@ -1,0 +1,28 @@
+
+
+## I have gone through below linux topics and commands  today.
+
+- Revised the previous linux commands 
+- how to write a shell script 
+- what are the consideration while writing the shell script and what is its format 
+- one major concept of inodes which is like 
+  - lets say there is enought space on the filesystem but we are not able to create new files on the filesystem 
+  - so how to troubleshoot this-- we can do this by running command # df -h so by running this command we can see the 
+    available disk space on the file system and then if there is enough space then we have to check the inode information in the system 
+    by running df -ih here i stands for inodes, after this we would be able to see the inodes information and if all the inodes are consumed 
+    then we will not be able to create any new file or directory in the filesystem 
+  - this issue is basically faced by some programms running on the system
+- cronjob
+  - cronjob means it is way of scheduling the tasks on a configured time 
+  - so if we want to automate tasks in the systems then we can use cronjob  
+  - way of writing the cronjob is like * * * * *  so here all the asterics signs represents the below time intervals 
+  - minute hour day month weekofday
+  - we can run cronjob by running it along with several flags 
+
+- lsof 
+  - this stands for  list of openfiles 
+  - this basically tells which files are opened by a process in the system 
+  - we can use this in critical operations like lets say if we are going to delete a file then we can check what process have opened the file which we want to delete this is just a use case 
+  
+- runlevels 
+- there are a lot of other commmands which i have been through 

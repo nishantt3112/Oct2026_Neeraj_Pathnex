@@ -1,0 +1,123 @@
+
+##############################################
+# JENKINS - Basic CI Pipeline pipeline 
+
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build'){
+            steps {
+                echo 'Building project'
+            }
+        }
+
+        stage('Test'){
+            steps {
+                echo 'Running tests'
+            }
+        }
+
+        stage('Deploy'){
+            steps {
+                echo 'Deploying application'
+            }
+        }
+    }
+}
+
+
+
+##############################################
+# GITLAB CI/CD - Basic pipeline stages  
+
+stages:
+    - build
+    - test
+    - deploy 
+
+build: 
+    stage: build
+    script: 
+        - echo "Building project" 
+    
+test: 
+    stage: test 
+    script: 
+        - echo "Running tests" 
+
+deploy: 
+    stage: deploy 
+    script" 
+        - echo "Deploying application"
+
+
+##############################################
+# ANSIBLE - Install and configure nginx 
+
+- name: Install and configure Nginx 
+  hosts: all 
+  become: yes 
+
+  tasks:
+
+    - name: Install nginx 
+      yum: 
+        name: nginx 
+        state: present
+
+    - name: Configure nginx 
+      template: 
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf 
+
+    - name: Start nginx service 
+      service: 
+        name: nginx 
+        state: started 
+        enabled: yes
+
+
+
+##############################################
+# TERRAFORM - create aws security group 
+
+resource "aws_security_group" "example" {
+    name = "example_security_group"
+    description = "Allow SSH and HTTP" 
+
+    ingress {
+        from_port = 22 
+        to_port   = 22 
+        protocol  = "tcp" 
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port = 0
+        to_port   = 0
+        protocol  = "-1"
+        cidr_blocks  =["0.0.0.0/0"]
+    }
+}
+
+
+
+##############################################
+# DOCKERFILE - create an apache container from dockerfile 
+
+FROM ubuntu:22.04
+
+RUN apt update && apt install -y apache2 
+
+RUN echo "Hello Pathnex" > /var/www/html/index.html
+
+CMD ["apachectl", "-D", "FOREGROUND"]
