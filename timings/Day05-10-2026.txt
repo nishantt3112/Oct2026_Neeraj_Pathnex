@@ -1,0 +1,72 @@
+        
+   - today i introduced by the git and some of its basic concepts 
+   - I spoke in english for 1+ hour.
+   - I revised the previous linux commands.
+        
+        - SDLC ?
+			it stands for software development lifecycle which means it is complete process or lifecycle of software development right from planning requirements to deployments and management.
+			-there are two methods related to this sdlc one is waterfall model which is traditional method of developing the application in which teams work basically on phases like one phase is completed than work is done on next phase. and changes are done mostly in later phases and feedbacks are given later which is costly and difficult
+			- then comes the agile method where the entire software is divided into smaller parts and iteratively teams work on smaller part in sprints which is of usually two weeks 
+			
+		- git clone - get the code from remote github repo and 				setup the local repo from scratch
+		- git pull - get the latest changes only from remote repo into local and only from the branch which is active in local 
+		- git branch - this returns the list of branched and the current branch which you are on.
+		- git switch branchname - used to swtich to branch name
+		- git swtich -c newbranch - used to create + switch on a new branch 
+		- git checkout -b newbranch -- also used to create a new branch and switch to new branch 
+		- also git checkout is used to switch to a particular commit as well
+	   
+
+	    - git merge -- used to merge the commits from one branch to other so lets say git checkout main so i am in main now and i want to merge the changes of feature1 branch so i would run git merge feature1 now the commits of the feature1 will come on the top of the main if in between there are no commits on main then fastforward will be done 
+	    - git pull --this is git fetch+merge so this means git fetch basically downloads the changes from the remote and then merges into the main this is git pull
+
+	    - branching strategies 
+	    	- there are normally three strategies
+	    	- git flow means team decides how many branches will be created and code will be promoted to the production like feature-dev-qa-uat-release-main
+	    	- large enterprise uses this 
+	    	- trunk-based devs generally works on short lived feature branches and directly push or merge the code into the main branch
+
+
+	    	- then github flow this means simply there is a main branch and feature branches are there so code is directly merged into the main so fast feedback is obtained and continous deployment based projects use this mostly 
+
+	    - PR raise - this is a open pull request means before merging the changes devs create PR and a reviewer will review the code/changes and then only the changes are merged into the target branch 
+	    - working directory
+	    	- this is the location where we develop the code or write the code simply a directory 
+	    	- staging area - this is a logical area area where git keeps the tracked files 
+	    	- tracked files are those which are known by the git
+	    	- untracke files are those  which are not known by git so if we make any changes to them they will not be tracked by the git 
+	    	- git add filename/s used to add files into staging area
+
+	    - git restore -- if we modified a file and have not committed the changes and want to undo the changes then we can use git restore filename 
+	    -
+	    - git reset -- this is used when lets say currently we are on A--B--C(HEAD) means the pointer is on C and we want the HEAD to point to B or any previous commit then we can use git reset it simply means i want to go on this commit/changes 
+	    - git reset  --soft commitid  --- this means that changes are committed and now we want the commit to be undo or changes to be undo but we want the changes to be in staging area 
+
+	    - git reset --mixed B === this means ki we want the changes to be in file but we want to undo the commit and also want to remove the changes from staging area 
+
+	    - git reset --hard commitID  === this means ki remove the changes from staging area 
+	    delete the changes made into the file 
+	    and discard the commit as well 
+
+	    - how to do git revert
+	    	--- this means lets say we have made somechanges into and commit that now we want to undo the changes now revert will create a new commit that will contain the correct changes and the previous problematic commit will be kept into the history  
+
+	    - git reset means git will remove the pointer to the previous commit and we will not be able to see the later commits yani ki A-b-c(head) git reset b a-b(head) c will not be shown into the current branch history 
+
+
+	 
+	    - how to do rebase 
+	    	--- this means pickin up the commits of lets say a feature branch and apply them on main branch usually on the tip of main branch without fastfowrd
+
+	    - git stash 
+	    - git cherry pick
+	    - git pull konse changes leta hai jis branch mein aap ho sirf usi k from the remote when we are in the local 
+	    - how to create PR how to add rulesets how to add contributor how to accept pending conrtibutor how to approve review and then merge the changes to target branch
+	    - hotfixes kaise hota hai 
+
+	    	- like we create a new branch from prod branch then lets say we added something and a new commit is then generated then we have to provide that change in to the dev stage qa uat etc so we have to do cherry pick to pick that particular commit and add it in each branch like uat qa dev .
+
+
+	    - git stash -- this means if we want the uncommitted changes to be saved temporarily and i want a clean working directory because lets say i have made some changes then suddenly need to switch the branch then the git would ask to commit the changes first so this is where i can save the work temporarily and run git stash -m "messag". again after completing the task i would run git stash pop 
+	    - .gitignore
+	    	- this is the file which contains or we can move required files inside this file which we dont want the git to track
