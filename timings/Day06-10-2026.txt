@@ -1,0 +1,30 @@
+What i did today 
+
+- I tried to speak in English for atleast one hour
+- I did revision of the previous topics 
+- below is what i learned in today's class
+
+
+-  what is cloud = cloud is a platform which provides infrastructure like networking, compute, databases, autoscaling, loadbalancing, etc which can be accessed over the internet 
+		- what is on prem = this means all the infrastructure like networking, compute, database, autoscaling etc are provided inside accessed with in the private network so no one can access from outside the private network.
+		- iaas paas saas 
+			iaas = this means infrastructure is provided by the aws cloud provider such as networking and a baremetal hardware which will be managed by the AWS and on the top of that BM  you have to select the OS cpu mem specs along with that the application and data have to be managed by you.
+
+		- paas = this is platform as a service which means you have to only work on your application and the underlying infrastructure  on which app would run will be taken care of by aws like it is a kind of serverless compute provided by the aws and its os patching security networking etc would be managed by the aws 
+
+		- saas = this means software as a service and in this model you will be provided with a softwar and you can use that and all the networking compute os patching services application will be managed by the provider eg. gmail youtube etc.
+
+		- landingzone 
+		- control tower
+		- interview questions: what is the number of ec2 instance were running in your org 
+					- what is your monthly aws bill in millions like 10 million 
+		- how to answer questions into interview like first try to give the answer then if interviewer deep dives than you can say ki actually it is xyz team which looks into this and i am just having overview of that 
+		-  arn = this is a unique number given to each resource inside aws with a proper naming convention
+		- what is there inside a policy = so policy is a set of permissions inside which either we can select the predefined permissions named as aws managed  or we can create custom permissions named as custom managed 
+		- iam policy roles users groups kya hote hai
+			iam role = this means it is an indentiy which has permissions attached with it and also who is can assume this role so this is defined into the trusted-entity means it could be a service account or a user several identities.
+		- iam user = this is the user created inside the aws account 
+		- iam group = this is like creating group inside the aws account and we can attach policy while creating the group and we can attach multiple iam users to an iam group
+
+		- and first deny all karte hai then only specific permissisons are allowed 
+		- vpc = this stands for the virtual private cloud means it is isolated private network and the resources are accessed virtually 

@@ -1,0 +1,97 @@
+
+###################################################
+# Ansible — Install Docker
+
+- name: Install Docker 
+  hosts: all 
+  become: true 
+  tasks: 
+    - name: Intsall Docker 
+      yum: 
+        name: docker 
+        state: present 
+    - name: Start Docker 
+      service: 
+        name: docker 
+        state: started 
+        enabled: yes 
+
+
+###################################################
+# TERRAFORM - Provisioning EC2 with VPC 
+
+provider "aws" {
+    region = "us-east-1"
+}
+
+resource "aws_vpc" "main" {
+    cidr_block = "10.0.0.0/16"
+
+}
+
+resource "aws_instance" "pathnex_ec2" {
+    ami = "ami-0abcd1234abcd1234"
+    instance_type = "t3.medium"
+    subnet_id = aws_subnet.main.id 
+    tags = {
+        Name = "Pathnex-EC2"
+    }
+}
+
+
+
+###################################################
+# KUBERNETES - Pod with volume mount 
+
+---
+apiVersion: v1 
+kind: Pod 
+metadata: 
+    name: pathnex-pod 
+spec: 
+    contaienrs: 
+    - name: web 
+      image: nginx 
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html 
+          name: html-volume 
+    
+    volumes:
+    - name: html-volume 
+      hostPath: 
+        path: /data 
+        type: Directory 
+
+
+
+###################################################
+# SHELL SCRIPT - Check for running services 
+
+#!/bin/bash 
+
+services=("nginx" "docker" "httpd")
+for service in "${services[@]}"
+do 
+    if systemctl is-active --quiet $service; then 
+        echo  "$service is running"
+    else 
+        echo "$service is not running "
+    fi 
+done 
+
+
+
+###################################################
+# NODEJS - application app.js 
+
+console.log("Hello Pathenx");
+
+
+
+###################################################
+# DOCKERFILE 
+
+FROM node:18
+WORKDIR /opt/pathnex/node-app 
+COPY app.js /opt/pathnex/node-app/
+CMD ["node", "/opt/pathenx/node-app/app.js"]
