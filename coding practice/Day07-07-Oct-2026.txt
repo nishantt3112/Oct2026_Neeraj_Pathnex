@@ -1,0 +1,108 @@
+
+##############################################
+# ANSIBLE - Setup Nginx with Custom Config 
+
+---
+
+- name: Setup Nginx with custom config 
+  hosts: all 
+  become: yes 
+
+  tasks:
+  	- name: Install Nginx 
+  	  ansible.builtin.package:
+  	  	name: nginx 
+  	  	state: present
+
+  	- name: Copy custom Nginx configuration
+  	  ansible.builtin.copu:
+  	  	src: nginx.conf
+  	  	dest: /etc/nginx/nginx.conf
+
+
+
+##############################################
+# TERRAFORM - Provision EC2 with IAM Role resource
+
+##IAM ROLE
+resource "aws_iam_role" "ec2_role" {
+	name = "pathnex_ec2_role"
+
+	assume_role_policy = jsoncode({
+		version = "2012-10-17"
+		Statement = [
+			{
+
+				Action = "sts:AssumeRole"
+				Effect = "Allow"
+				Principal = {
+					Service = "ec2.amazonaws.com"
+				}
+			}
+
+		]
+	})
+}
+
+##EC2 INSTANCE PROFILE
+resource "aws_iam_instance_profile" "ec2_profile" {
+	name = "pathnex_ec2_profile"
+	role = aws_iam_role.ec2_role.name
+}
+
+##EC2_INSTANCE
+resource "aws_instance" "pathnex_ec2" {
+	ami = "ami-0abcd1234abcd1234"
+	instance_type = "t2.medium"
+	iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+
+	tags = {
+		Name = "Pathnex-EC2"
+	}
+}
+
+
+
+##############################################
+# KUBERNETES - ConfigMap and Secret Management
+
+--- 
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+	name: pathnex-config
+data:
+	app.properties: |
+		key = value
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+	name: pathenex-secret
+type: Opaque
+data:
+	password: cGF0aG5leHBhc3M=
+
+---
+
+
+
+##############################################
+# JAVASCRIPT - java application Hello.java
+
+class Hello{public static void main(String[] args){ System.out.println("Hello Pathnex");}}
+
+
+
+##############################################
+# DOCKERFILE - 
+
+FROM 		openjdk:17
+WORKDIR		/opt/pathnex/java-app
+COPY 		Hello.java /opt/pathnex/java-app/
+RUN 		javac /opt/pathnex/java-app/Hello.java
+CMD 		["java", "-cp", "/opt/pathnex/java-app", "Hello"]
+
