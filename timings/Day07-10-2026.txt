@@ -1,0 +1,65 @@
+## I did revision of previous day topics 
+# I tried to speak in English for more than a hour 
+# I did preparation for presentation for evening class 
+
+
+aws 7-oct
+		- what are scp vimp intv question 
+		- vpc 
+			= this stands for virtual private cloud means it is a private network inside which aws provides networking compute database etc and these can be accessed virtualy so its a kind of isolated network on aws cloud
+		- subnets 	
+			= lets say there is a vpc which is a large network and  having a cidr range now we want multiple sub networks of smaller cidr range so the subnetting is done and we get subnets so subnets are the sub networks created from large network. There could be public and private network public network are having internet gateway attached to it and resources inside the pub subnet have access to internet
+			- where as private subnets are those subnets which do not have any route to internet gateway if any resource wants to talk to internet they can reach to internet gateway via the nat gateway and also no external traffic is routed to private subnets.
+		- routing tables 
+			= routing tables defines the route to the internet gateway vpc peering and nat gateway to the resources inside the subnets 
+		- nacl
+			= nacl stands for network access control list this means it is a kind of firewall which is attached to the subnet level and it is stateless means if inbound traffic is allowd on a port via a rule then you have to explicitly allow the outbound rule for the corresponding rule other wise traffic would not be able to go back outside the network 
+		- security groups
+			= this is the firewall attached on the instance level actually attached to the ENI of instnace and it is stateful means 
+				if a rule for inbound traffic is created on a port then outbound rule will be automatically created.
+		- security rules 
+			= these are the information for inbound and outbound traffic like what is the source protocol port rulename and rule number are given to this rule.
+		- deny and allow 
+		- s3
+			= it is an object storage and it stands for simple storage service. It basically stores the unstructured data like files folders audio video images etc +metadata + key and the data is stored as a whole (object) . also it provides versioning data encryption there are bucket policies so that we can implement access control who can access which bucket and what data also there are lifecycle rules means there are different storage classes inside which data is stored and by defining the lifecycle policies we can trasit the data to different storage classes according to their access frequency
+		- lifecycle rules 
+		- how to name a bucket --- tcs-appname-devsecopsasteam-eks-ap-south-1 like this.
+		- session manager.
+			- this is a service which is used to connect to an ec2 instance without providing the privatekeys and establishing the ssh conncetion from local system to ec2 
+		- route53 is global.
+			= route53 is a DNS service provided by aws. so we can create hosted zone under this and under the hosted zone we can create multiple records so the default records we get after creating a hostedzone are NS and SOA which are name servers and start of authority 
+			so we can purchase domain as well and it is also a domain registrar
+			so route53 basically maps the domainname to an IP related to different resources like EC2, loadbalancers ,cloudfront, s3 etc OR simply it resolves the IP of a domain name
+			- it also provides several routing policies like 
+			- simple routing 
+			- failover
+			- weighted routing 
+			- geolocation
+			-etc 
+			there are several records types like A(resolves to ipv4 address ) AAAA(resolves to IPv6 address) CNAME(this is an alias name like www.abc.com abc.com both will be resolved on same IP ) MX(mail server) NS (name servers)etc 
+		- in route53 hosted zone we get two entries by default NS and SOA.
+		- 
+		- routing policy 
+			- simple routing the traffic to single resource 
+			- weighted routing means distributing the traffic to two different resources or versions of appliation like 10:90 etc it is useful for canary deployments 
+			- latency based routing --  is done to providing lowest latency on the basis of region
+			- failover - this routing policy is used when we want to forward traffic to healthy resources when one become unhealthy used in DR when active-passive
+			- geolocation this routing policy means route53 response on the basis of users geolocation 
+			- 
+			- IP-based routing 
+
+		- cloudtrail- this is aws service used to do audits like who did what at what time to which resource from where it was done and how it was done so it is a detailed information in json format. And all the global events are recorded in cloudtrail
+		- Amazon CloudWatch is an AWS-native monitoring and observability service. It provides metrics, logs, alarms, dashboards, application and infrastructure monitoring, and other capabilities for monitoring AWS resources and applications.
+		- autoscaling
+		- this service is used to scale in and scale out the number of ec2 instances on the basis of resource consumtion and this is done by the help of scaling policies so there are several scaling policies like target-tracking policy, step scaling policy-this means ki scale in scale out the servers on the basis of +/- percentage on the base utilization threshold like cpu > 50% --> +/- 1 instance, cpu > 60% +/- 2 instances 
+		- then comes simple scaling this is the basic approach which means 
+		- scheduled scaling - this means scaling is done on the basis of predefined time like we want that at 9 AM daily scale the instances to this desired no.
+		- predective scaling -- this policy is used when there is a prediction for the patterns like when usually the traffic spikes or resource utilization increases or decreases .
+		- 
+		- Lambda
+			- it is a serverless compute service which only runs till the process or application runs inside that so it is an event driven function and the maximum time a lambda function can run is 15 mins 
+			- so if your app need more time to be get executed than go for other services like ecs etc 
+			- and lambda charges for one second min 
+			- so there is an event -- applicationruns  -- destination
+
+		
