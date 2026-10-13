@@ -1,0 +1,44 @@
+* today I revised the previous topics of AWS 
+* I have spoken in English for 1 hour
+* I did practicals of the AWS services 
+
+
+aws 9-0ct 
+
+		- revision of AWS RDS 
+		- sql and nosql 
+			- sql means structured data like there would be a schema created inside the database and the data is organized in rows and coloums 
+			- nosql stands for not only sql this means it is related to the unstructured data like it is stored in key value pair also images videos audio files are considered as unstructured data and these are stored in s3 as an object.
+			eg- mongodb redis dynamodb s3 
+
+		- amazon dynamoDB - it is nosql db where data is stored in key-value format, provides encrytion at rest can be integrated with lambda cloudwatch etc.
+		- amazon redshift - it is a kind of data warehouse provided by aws 
+		- rsync async
+			rsync= this means lets say we copy a file from source to destination under a directory now this rsync will only copy the required differences into the destination file 
+		- sync - this means lets say the data is in memory of the system now when we run sync command then the data is written to the disk from the memory this is known as data sync 
+
+		- DMS so there are tools which you can use to migrate the data like liquibase atlas etc .and it is an aws service which is used to migrate data from one db to another db. 
+		- aws batch
+			= this means ki it is a managed service which runs batch jobs on aws serverless compute we only have to define the job definition like what would be the container image parameters resources and then the batch jobs will be executed by the AWS itself 
+			so basically aws provides the environment to execute the batch jobs and these jobs are basically executed on containers 
+
+		- aws glue 
+		- aws efs 
+			- it is a network storage where multiple nodes or server can access the storage simultaneously or concurrently
+		- aws elastic beanstalk
+			= this is a PAAS service provided by aws mean aws provides the networking serverless compute and runtime as a whole where you can deploy your application on like a node.js python etc can be deployed on a serverless compute where you or devs will only have to focus on code or application the server management networking etc is handled by the aws 
+
+			 so this 
+		- aws snowball 
+			= this snowball means ki it is a physical device which transported to the client side or dc and then huge amount of data is transferred to this physical device instead of copying via the internet and after that AWS will transport this physical device usually transported via trucks and then it is imported to the aws S3 or backend storages .
+		- aws nfs vs nas 
+			aws efs stands for elastic file storage which provide a fully managed,  shared and scalable storage on the network so that multiple clients or servers can access files on network storage
+			- NAS this is network attached storage means there is shared storage present remotely and we can access that over the network and multiple clients can access the data concurrently
+
+			- NFS --> this is the protocol which allows client to access the NAS over the network
+		- aws xray 
+		- aws code pipeline or code build 
+			= this is the CICD provided by the aws so 
+			- so codepipeline is the managed aws service and it is the one who who can manage the stages and builds 
+			- codebuild is the one who actually creates the build environment and executes the commands inside the stages 
+		
