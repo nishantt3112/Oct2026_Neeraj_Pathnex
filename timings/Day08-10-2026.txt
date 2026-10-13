@@ -1,0 +1,56 @@
+* today I revised previous topics 
+* I tried to speak in English for more than a hour 
+
+
+aws 8-oct (security related services)
+		- aws shield 
+			- this is a service which is used to protect the resources from malicious traffic like if an attacker sends millions of request from many servers onto your application server in order to make it slow or crash so that other users could be affect.
+			- so there are two offerings are provided for aws shield
+			-	one is standard which is provided by aws by default
+			- second is advance shield which is used or configured in front of CDN, r53 and loadbalancer and elastic ip 
+
+		- ddos -- DDoS = Distributed Denial of Service. Bahut saare different sources se kisi server/application par itna zyada traffic bhejna ki legitimate users ke liye application slow ya unavailable ho jaye
+		
+		- AWS WAF == this stands for web  applicaiton firewall 
+		- means first it reads or inspect the HTTP/HTTPS request and on the basis of IP or source it can allow or deny a request from entering it into the network
+		- so what are the rules for example -- sql injections, country of origin, rate of requests, IP addresses, headers, etc.
+
+		- WAF vs Shield == waf works on the basis of predefined rules and it allows/deny the request by inspecting the request  whereas the shield is used to protect the application servers from malicious or ddos attacks 
+
+		- their is sql injeection VS xss cross site-scripting 
+		- this means sql injection targets the database so malicious sql is injected into the system to bypass the authentication and 
+		- xss means this is a way by which attackers inject malicious code  like html/js/webcontent into an application and then when the user opens the that page then it executes into the browser.
+
+
+		- AWS guardDuty == this is used to detect or monitors and analyze the malicious unauthorized activies into the aws resources 
+		- so it requires some sources like vpc flowlogs, dns logs and cloudtrail from where it can get logs or events and then it can analyze the suspicious or malicious activities 
+
+		- aws inspector
+		- CVE vs CVSS
+		- CVE stands for common vulnerability enumeration and it is an ID given to a known vulenrability for a library and it is written in format like CVE-year-number example log4j was a library or a logging framework use in java based application and there was a vulnerability found named Log4Shell and it affected log4j2.x versions and has a CVE number CVE-2021-44228 which was given before the public disclosure and then there was a patch provided for its fixation
+		- then the severity is defined by CVSS --common vul security score
+		- so this is a score and is given by a team nist and it defines the servirty of the vulnerabiltiy so this severity level is a score which is given by this NIST and known as security score so log4j has 10 score.
+
+		-  
+		- 
+
+		- delegated admin vs management account
+		- KMS = this is a service which manages and stores the encryption keys also we can create encryption key and using that encyrption key we can encrypt the data of rds s3 etc .
+			- then there are data key and kms key 
+			- so kms key protects the data key and then it encrypts the actual data.
+			- 
+		- key rotation = this meas
+		- symmetric and  asymmetric 
+			= these are the keys used to encrypt data so in symmetric keys data is encrypted and decrypted using a sinle key
+			= in asymmetric method there are two keys one key is used to encrypt and other key is used to decrypt the data
+		- systems manager 
+		- aws cloudfront 
+			= this is an AWS service which provides caching for the content and the content is cached on the edge servers located into multiple geolocations and we can configure  ACM certificates validation and r53 + CDN + s3 to host static website and so it is basically a content delivery network means a network of edge servers so incoming traffic requests hits to the  CDN servers as the content is cached and instead of hitting to the backend servers the content is served to the users from the nearest edge servers 
+
+		- aws rds 
+			= aws provides this managed database service where we can select multi-AZ and singleAZ deployments and there it provides sql databases like postgresql mssql  aurorasql etc and there we can configure the maintenance window backup window also we can configure the credentials db identifier subnet groups disk size and many more configurations in the backup window we define when the backup or snapshots should be taken 
+			in the maintenance window we define the time period under which db instance's patching or software updation is performed by the aws itself we only have to define the window
+
+		- aws azs 
+			- availability zone is a geolocation under a region and inside this az the resources are present so basically these azs are datacenters
+		
