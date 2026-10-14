@@ -1,0 +1,147 @@
+################################ 
+# ANSIBLE - Setup Docker Container for Nginx
+
+---
+- name: Setup Docker Container for Nginx 
+  hosts: all
+  become: yes
+
+  tasks:
+  	- name: Pull Nginx image
+  	  community.docker.docker_image:
+  	  	name: nginx
+  	  	source: pull
+
+  	- name: Run Nginx container
+  	  community.docker.docker_container:
+  	  	name: nginx-container
+  	  	image: nginx
+  	  	state: started
+  	  	published_ports:
+  	  		- "8080:80"
+  	  	restart_policy: unless-stopped
+
+
+################################
+# TERRAFORM - EC2 with Auto Scaling Group resource
+
+
+terraform  {
+	required_version = "= 1.9.8"  			# this is the local terraform cli version and this is a terraform version locking so that local terraform version can talk to terraform cloud provider api's 
+	required_providers { 
+	aws = {
+		source = "hashicorp/aws"
+		version = ">= 5.0"     				# these are the version constraints    ~> means pessimistic using this only minor version is updated not major like v5.0-->v5.x  allowed but not v5.0 --> v6.x not allowed 
+		and 
+	}
+	}
+}
+provider "aws" {
+	region = "ap-south-1"
+}
+
+resource "aws_launch_template" "example" {
+	name_prefix 		= "example-config"
+	image_id 			= "ami-0abcd1234abcd1234"
+	instance_type 		= "t3.medium"
+}
+
+resource "aws_autoscaling_group" "example" {
+	desired_capacity 	= 2 
+	max_size 			= 3
+	min_size 			= 1 
+	vpc_zone_identifier 	= ["subnet-12345678"]
+
+	launch_configuration = aws_launch_configuration.example.id
+}
+
+
+
+
+################################
+# KUBERNETES - create deployment and HPA 
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+	name: pathnex-deployment
+spec:
+	replicas: 1 
+	selector:
+		matchLabels:	
+			app: pathnex-app
+	template:
+		metadata:
+			labels:
+				app: pathnex-app
+		spec:
+			containers:
+				- name: nginx 
+				  image: nginx 
+				  ports:
+				  	- containerPort: 80
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+	name: pathnex-hpa
+spec:
+	scaleTargetRef:
+		apiVersion: apps/v1
+		kind: Deployment
+		name: pathnex-deployment
+	minReplicas: 1
+	maxReplicas: 10
+	metrics:
+		- type: Resource
+		  resource:
+		  	name: cpu
+		  	target: Utilization
+		  	averageUtilization: 50
+
+
+
+#############################################
+# JENKINS -
+
+pipeline {
+	agent any
+
+	stages {
+
+		stages('Deploy to kubernete'){
+
+			steps {
+				script {
+					sh 'kubectl apply -f deployment.yaml'
+				}
+			}
+		}
+	}
+}
+
+
+
+############################################
+# GITLAB - Deploy to kubernetes
+
+stages:
+	- deploy
+
+deploy:
+	stage: deploy
+	script:
+		- kubectl apply -f kubernetes/deployment.yaml
+
+
+
+#############################################
+# DOCKERFILE
+
+FROM 		ubuntu:22.04
+
+ENV 		INSTITUTE=Pathnex 
+ENV 		COURSE=DevOps 
+CMD 		["echo","$INSTITUTE-$COURSE"]
