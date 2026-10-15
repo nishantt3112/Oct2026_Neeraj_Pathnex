@@ -1,0 +1,109 @@
+
+
+# Today I learned docker and some of its concept 
+# I revised the previous topics of aws 
+# I tried to speak in English for an hour 
+
+
+10-oct
+	
+		DOCKER 
+
+		- what is docker or docker container
+		  = so docker is a platform which is used to create a container which is simply an isolated environment inside which we can run application along with all its dependencies. and it is portable so we can run that application in any environment like dev-stage-uat-prod etc.
+
+
+			docker is a technology which is used to provide an isolated environment to run a process.
+			cgroups - how much resources can be alllocated like cpu memory etc from the system to the process.
+		- how it works = so docker basically uses two linux concept one is namespace and other is cgroups 
+		- so there are namespaces on a linux system like pid net mnt uts ipc user
+		- so namespace controls how a process running can see what view of the system.
+		- so no two processes can see each other's namespace inside which they are created.
+		- 
+		- docker/containers vs VMs
+			= docker shares the kernel of the hostmachine and no dedicated resources are allocated to the container. so container uses the resources which it requires only during its execution period. if a container exits or terminated then it releases the resources.
+			= VMs are alloacted a dedicated kernel from the host and dedicated resources like cpu memory are allocated
+		- linux container can't run on windows kernel and vice-versa
+
+
+		- dockerfile
+			= this is a file where we write some instructions like how a container image should be created so basically the configurations are defined inside a dockerfile and from this image a container is further created.
+			= some instructions are 
+			= FROM this is used to setup the base image or os-images like nginx(linux+nginx) ubuntu etc 
+			= so there are slim images means base-os-image is having very minimal binaries or softwares only then on the top of it we can install or put required binaries only to run the applicaion or process.
+			- WORKDIR = this means what would be the default working directory we want in the container when it get starts.
+			- COPY = this is used to copy files from the host to the container image 
+			- ADD = this is used to download the files and copy the downloaded those files into the container image.
+			- CMD = this means what the default executable/command or argument would run inside the container when it executes 
+			- ENTRYPOINT = this does also mean what the default command or executable would run into the container when it executes 
+
+			- then CMD vs ENTRYPOINT
+
+			= CMD can be override while entrypoint can't overriden though there is a way we can override ENTRYPOINT 
+			= example CMD -> ["echo", "nishant"] here echo is command and argument is nishant
+
+				docker run image "kumar"
+				output -- kumar 
+			= now what if we want a fixed executable which cant be overriden so here we use entrypoint 
+			= ENTRYPOINT ["echo","nishant"] means fixed command 
+			= now while running a container 
+				- docker run image "kumar"  so this can't be overriden instead this argument will be appended like when docker container runs we get 
+
+				nishant kumar
+
+			= EXPOSE - this means which port on the container which we want to be opened so that application can be exposed on this port and this command doesn't actually exposes the port instead it is only used to make user understand that ok the app is exposed on this port.
+
+			= RUN = so this instruction is used to run or execute linux commands inside the contaienr and these commands executes during container image build. 
+				apt update 
+				whoami 
+				etc 
+
+				multiline commands can be run using command1 && command2 && command3
+
+			= wrtiable layers and readonly layers 
+			= so in an image there is no writeable layer all layers are readonly layers 
+			= but in a container we get read-only layers and one writable layer
+
+			= base image == read-only layer
+			= dependency files = read-only 
+			= artifact = read-only
+			= RUN == this is writable layer and this is where we will write or modify some file lets say 
+			= also lets say ki there is a readonly layer which is an image and when we create a container from this image a writeable layer is added on the top of all the readonly layers(image)
+			= so running container = w + r
+			= now there is a concept coW means ki a copy of dockerfile(readonly layer) is created and a writable layer is added and this is writable layer is stored on the host and the original dockerfile is kept and write operations are done on this new writable layer.
+ 
+		- default network type/s in docker
+			- networking is used to make communication between container to container container to host and from external networks.
+			-
+
+		- bridge -default network a bridge is created 
+		- host - containers uses the host network 
+		- none - no network is assigned only a loopback address will be provided 
+		- overlay- lets say there are multiple containers running on several hosts now this is used to create a logical network so that all the containers can communicate 
+		- 
+		- loopback - this means server or container will resolves dns to its loopback ip which is 127.0.0.1
+
+		- volumes -- vols are the storages which are used to store data and these volumes are mounted on the container  to a path inside the pod  so that contaienr can write data on these volumes and data can be persisted 
+		- so the containers are ephemeral means temporary and if it terminated than data which is inside in it is also gone so we need to persist the data when a container gets created on the host then by def it uses a directory as a volume from the host now when the container gets deleted it is also removed 
+		- then if we bind or mount a volume explicitly then even if the container gets deleted then the volume will remain and data is stored inside that volume and if we create a new container and mount it on the existing volume and we can again access the data from within inside the container.
+		- 
+		- mount --bind mount which i know is lets say there is a directory on host machine and we want to mount that dir in pod then we will use --mount type=bind, source=filename, target=/path/inside/container/dir1 imagename so this directory on the host is already present on host and is not managed by the docker  and volume mount means we create a volume which will be managed by the docekr and docker run -v volumename:/path/to/container/dir this is diff main which i know
+		- bind mount explained above 
+		- system prune 
+			= this command is used to delete all the unused resources like containers , networks, volume, dangling images -- these are the images which are not having a tag and are not used by a container.
+		- what are dangling images ---^
+		- port mapping 
+			- this means lets say app running in container is listening on 4000 now when the container started on host then the incoming traffic will first come to hostIP
+			now where the traffic would go now so we will make a connection or mapping like capture the traffic on this machine on this hostPort lets say 3000 and forward the traffic to the container port 4000 so now how traffic would be routed is 
+
+			traffic-->HostIP-->hostPort(3000):containerPort(4000)--application
+
+	 - docker commands 
+	 - ok so the docker architecture is like 
+	 		- dockerCLI 
+	 		- dockerdaemon
+	 		- dockerhub/registry
+
+
+	 		- now docker cli talks to dockerdaemon se connect hota hai ek socket se like /var/run/docker.sock 
+	 		so if we mount this as volume /var/run/docker.sock into the container then from inside the contaienr we can run docker cli command and the attacker might create a new container by mounting a file or dir into the container and the host can be compromised 
