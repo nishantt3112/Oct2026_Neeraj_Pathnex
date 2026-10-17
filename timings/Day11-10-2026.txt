@@ -1,0 +1,41 @@
+
+* Today I revised the previous topics of aws
+* I tried to speak in English for more than a hour 
+* today's learning
+
+11-Oct
+			kubernetes 
+
+			- what is k8s 
+				= this is a container orchestration tool and we can achieve autoscaling, self-healing, High availability and many more functionalities and capabilities like we can configure  advanced routing, security etc 
+			- what are k8s components 
+				= there is a controlplane and dataplane 
+				- controlplane is the node where the core components are deployed
+				- kube-api-server -- this is the main entry point of the k8s cluster so it performs several tasks like request authenctication authorization admission and mutation are performed on the request like ifthen validating the request and then it stores the object into the etcd now no other resource talks to each other apart from the api-server into the cluster so every request goes through the api-server and only this api-server talks to the etcd db.
+				= etcd == this is the nosql database inside the k8s cluster. this is used because as it can store the entire cluster's infor in key-value and distributed format so on cloud like eks aks gke this is deployed in an distributed architecture.
+				= controllerManagers -- these are a collection of processes which runs into loop and they are responsible to maintain the current state with the desired state so there are a lot of controllers like rs controller deployment controller cronjob controller etc.
+
+				= scheduler -- this is the component which is responsible to schedule a pod on an appropriate node so for placing a node it do some internal calculations looks for taints tolerations node affinity antinodeaffinity pod density resource availability cpu memory etc so some internal algorithms.
+
+				= kubelet -- this is the agent which runs on every node like worker node and on controlplane node as so its main task is to read  the podspec from the api-server and ask the container runtime to create the container it talks to the CSIdriverif any volume needs to be created.
+				it also collects the metrics or health status of the node and the pods 
+
+				= kube-proxy (non-core component)
+					- this is basically a networking component and can be called as an addon so it is basically used to update the routing tables so it can also talks to the kube-api-server and it reads the services and endpoints/endpointslices so it updates the routing rules into the IPvtables into the kernel of the node and it manages these routing rules like create update and delete the rules. then when a request comes to the node then these are captured and kernel is the who actually routes the request by reading the Routing rules so DNAT is performed at the service level.
+
+					- there are other offerings as well apart from this kube-proxy like CNI addons there are advance networking addons like calico cilium flannel weave etc so all of them provides the networking to the containers like creating vinterfaces assigning ips networking.
+					- so main point is that some of the CNI solutions can provide the networking + update the routing rules as well using eBPF. so these eBPF are basically some programms which are feeded into the kernel and kernel runs these programs and routing rules are updated then 
+					-
+					
+				= CRI- this is Container runtime interface which is basically 
+
+			- what is diff between kube-proxy and CNI
+			- servic to pod comm and pod to pod comm
+		* - interview quest
+				= what were node size in your eks cluster 
+				- in dev there are generally 2-4 nodes 
+				- qa 10 
+				- and in sharedqa 80
+				- in prod 
+		* - worked on app side or infra side 
+			- ans: on infra side as a devops
