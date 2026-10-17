@@ -1,0 +1,43 @@
+* Today I revised the previous topics of k8s docker and aws 
+* Also i tried to speak in English and explained the DevOps topics to myself
+
+- a new kubeconfig file gets created for a new eks cluster 
+			- actually there is a file which is updated every time when a new cluster is created so this means that a new cluster's information is added like the context cluster's API server's endpoint users list authentication methods certifactes of the eks 
+			so each time we run eks update kubconfig --region=regioncode --cluster=clustername then this info is updated in /.kube/config file 
+		- gp3 vs gp2 in storageclass
+			- these are the types os SSD or ebs attached to an ec2 instance in aws so the diff is in the performance cost and the iops and througput   
+			- like gp3 has 3000 iops by default and gp2 has 3 iops 
+			- gp3 has 2000Mib/s vs gp2 has 250Mib/s
+			- gp3 has lower cost vs gp2 has higher cost 
+		- cordon uncordon drain 
+			these are the terminologies used when we move the workload running on a node to another node 
+			- kubectl cordon nodeip this means marking a node unschedulable
+			- kubectl drain node this means the actual pod eviction takes place gracefully we can pass flags for forcefully eviction
+			- kubectl uncordon nodeip after marking the node schedulabe so that it can come in ready status and workload can be again deployed
+		- pdb 
+			 - this is pod distruption budget that is used if there is a controlled pod eviction is performed and this will ensure that a minimum number of pods should be up and running all the time so that we there would be no application downtime
+
+		- selectors
+			- these are the label query which is used to select the set of kubernetes resources on the based of the labels attached to them
+			- so there are two types of selectors
+			- set based 
+				- this will match the labels on the basis of sets like conditions can be given in and or logics
+			 equality based  
+			 	- means exact values are matched 
+		- cordon ko daemonset bypass kar sakta hai
+			- yes daemonset manages one pod per node so lets say we do cordon and then drain the node then this drain will evict the pods and as soon as this evit the daemonset pods daemonset will detect this pod termination and instantly it will create the new pod so this process will continue into the loop and pods will not be evicted so that is why we run kubectl drain node --ignore=daemonset or --forcefully delete the ds 
+		- statefulsets
+			- this is a kubernetes native resource which provides stable identiy to the pods running under it and this is used by the stateful application which requires a persistent volumes and a stable network identity
+			- so it similar to deployments but the pods running under this gets a stable network identiy and each pods gets a unique persistant volume via a pvc and a stable identity like a name 
+			-   
+	
+		- keda vs metricsserver
+			- metrics-server is a resource which is a third party software which basically collects the metrics  related to cpu and memory of a node and pod from the api server and these metrics are simply exposed by the nodes and pods on an endpoint and there is a CAdvisor who actually collects the metrics and exposes them and then the kubelet post these metrics to the kube-api server and metrics server basically collects these metrics in real time 
+			- now comes the HPA so it is horizontal pod autoscaler means it is the k8s native resource which scale in and scale outs the pods on the basis of resourceutilization threshold 
+			- so HPA collects the metrics from metrics server and it monitors the deployment and its avgresource utilization of cpu/mem and if required it adjust the number of pods 
+
+			- keda 
+				- kuberntes event driven autoscaler 
+				- means it can reads the events from different sources which we configure like cicd related metrics messaging tools related metrics database related metrics etc etc and then there is a HPA which will scale in out the number of pods to serve the traffic properly
+		- karpenter
+			- this is used to autoscale the number of underlying worker nodes on the basis of the workload's requirements and it provisions the ec2 instance dynamically so it basically detects the requirements of the pods and on basis of that it spins up a node where as inthe eks clusterautoscaler it will scaleup or scaledown the ec2 instance and selects the instance what is defined into the launch template 

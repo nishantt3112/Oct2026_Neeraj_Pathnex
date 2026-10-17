@@ -1,0 +1,169 @@
+
+###################################################
+#  ANSIBLE - Deploy an application on multiple hosts
+
+- name: Deploy web application to multiple hosts
+	hosts: all 
+	become: true
+
+	tasks:
+		- name: Install Apache
+			ansible.builtin.apt:
+				name: apache2
+				state: present
+				update_cache: true
+
+		- name: Copy Web application files
+			ansible.builtin.copy:
+				src: /path/to/web/app/
+				dest: /var/www/html
+				owner: www-data
+				group: www-data
+
+		- name: Ensure Apache is running and enabled
+			ansible.builtin.service:
+				name: apache2
+				state: started
+				enabled: true
+
+
+
+###################################################
+#  TERRAFORM - Create EC2 with ALB 
+
+terraform {
+		required_version = " = 1.9.0"
+
+		required_provider {
+			aws = {
+				source = "hashicorp/aws"
+				version = "~> 6.0"
+			}
+		}
+}
+
+provider "aws" {
+		region = "us-east-1"
+}
+
+ 
+resource "aws_lb" "pathnex_lb" {
+		name 				= "pathnex-lb"
+		internal		= false
+		load_balancer_type = "application"
+
+		security_groups = [aws_security_group.allow_ssh_http.id]
+		subnets 		= [aws_subnet.public.id]
+}
+
+resource "aws_instance" "pathnex_ec2" {
+		ami 					= "ami-0abcd1234abcd1234"
+		instance_type = "t2.micro"
+
+		security_groups = [aws_security_group.allow_ssh_http.name]
+
+		tags = {
+			Name = "Pathnex-EC2"
+		}
+}
+
+
+###################################################
+# KUBERNETES - Helm Chart for Redis with Persistence helm
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+helm search repo bitnami/redis --versions 
+
+helm install pathnex-redis bintnami/redis --version 28.0.15 --set master-persistence.enabled=true --set master.persistence.size=8Gi
+
+
+
+###################################################
+# JENKINS - Multi-Environment Deployment pipeline
+
+pipeline {
+		agent any
+
+		environment {
+			IMAGE_NAME = 'pathnex-web-app'
+			DEPLOY_ENV = 'production'
+
+			stages {
+				stage('Build') {
+					steps {
+						echo 'Building Docker Image ...'
+						script {
+							docker.build("${env.IMAGE_NAME}")
+						}
+					}
+				}
+
+				stage('Test') {
+					steps {
+						echo 'Running Tests ...'
+					}
+				}
+
+				stage('Deploy to kubernetes') {
+					steps {
+						script {
+							if (env.DEPLOY_ENV == 'production'){
+								sh 'kubectl apply -f kubernetes/prod-deployment.yaml'
+							}
+							else {
+								sh 'kubectl apply -f kubernetes/dev-deployment.yaml'
+							}
+						}
+					}
+				}
+			}
+		}
+}
+
+
+###################################################
+# GITLAB CI/CD - Environment-Specific Deployments stages
+
+stages:
+	- build
+	- push 
+	- deploy
+
+variables:	
+	IMAGE_NAME: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+
+build:
+	stage: build
+	script: 
+		- docker build -t "$IMAGE_NAME" .
+
+push: 	
+	stage: push
+	script:
+		- echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+		- docker push "$IMAGE_NAME"
+
+deploy:
+	stage: deploy
+	script:	
+		- | 
+			if [ "$CI_COMMIT_REF_NAME" = "main" ]; then
+				kubectl apply -f kuberntes/prod-deployment.yaml
+			else
+				kubectl apply -f kubernetes/dev-deployment.yaml
+			fi
+
+
+
+
+###################################################
+# DOCKERFILE - multi run commands 
+
+FROM 				ubuntu 
+RUN 				apt update && \
+						apt install curl -y && \
+						apt install vim -y 
+						
+CMD 				["echo","Hello Pathnex"]

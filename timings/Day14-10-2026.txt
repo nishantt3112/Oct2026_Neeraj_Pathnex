@@ -1,0 +1,34 @@
+
+* Today i revised the previous EKS and Docker concepts 
+* I tried to speak in English by explaining the DevOps concept for more than 2 hours
+
+
+- creaeted eks cluster using terraform 
+		- namespaces were external-dns, istio, keda, karpenter
+		- namespace are used to isolate the workload running inside a cluster and it is basically a logical bounday inside which pods related to a specific application could run 
+		- inside the namespace a preconfigured resources are allocated like cpu memory other kubernetes resources so that a single application alone won't consume all the resources available on the node 
+
+		- each apps config /etc/applicationname
+			- this means /etc is the directory which holds the configuration of each software of application in linux based systems
+
+		- how to check the readiness and liveness in real troubleshooting 
+			- liveness probe -- means is there any requirement to restart the application or like if the application is stucked or in deadlock situation
+				- this means application is up and running or not this is checked by this probe 
+				- so a ping or health check is done on an endpoint which is exposed by the application itself like /healthz/livez on port 80 
+				- and some health-checks configuraitons are also configured like healthy threshold unhealthy_threshold timeout periodseconds etc 
+				- so if a application is found not alive then it will might be restarted by the kubelet.
+			- readiness probe
+
+				- this means the application running inside the pod is able to serve the traffic or not this is checked 
+				- again at an endpoint which is exposed by the application like /healthz/readyz health-checks are performed and if the app is not able to serve the traffic or there would be high latency found then it will be removed from the service endpoint so that only healthy pods would serve the traffic 
+		- -- curl -iv "http://localhost:80/health/livez"  this means ki curl is a utility by which we can access a url via cli 
+
+
+
+
+		- first configure the ingress like what are the controllers and what is listeners 
+		- different scenrios were discussed by creating error or issue first then troubleshooting the error so the scenrios were like 
+			- app is up and running into the pod loadbalancer is there it is listening but traffic is not reachable to the pods
+			- we used istio as the gateway so it was not configured that means traffic coming from outside hits to the loadbalancer but after that there was no configuration where to reach how to reach like what are the targetgroups routing rules 
+			- then if lets say ki isito was removed now nodeport service ip is created still the traffic is not reachable on to the pods security group rules were ok inbound and outbound rules were correct services were created but labels were incorrect so the traffic was able to reach to the nodeport service but due to mismatch of the labels traffic is not routed futher to the pods.
+			- some times dns propogation takes time so wait for some time if a dns name or ip is updated in the record on route53
