@@ -1,0 +1,56 @@
+# Today i revisied previous kubernetes topics 
+# I tried to speak and explain the k8s concepts in English 
+
+
+
+kubernetes 
+
+			- standard support and extended support 
+			- standard support mein you will be provided support for a specific eks version
+				- v1.3x --> v1.3y for 14 months 
+				- if you won't change the version under standarsupport after 14 months you will be charged $0.1 per hour and even after for more 12 months you wont updated the version then aws itself will update the control plane or eks version and you app might crash
+   		- so simply if you didn't selected extended support then aws will do the upgrade 
+				- extended support is provided when your standardsupport expires 
+
+			- Advanced Control Plane Configuration 
+				= while creating the eks cluster 
+
+			- how to give tags 
+
+				Project:
+				env:
+				owner:
+				team: 
+				name: 
+				application: 
+
+
+	*  	POD in pending stage 
+			- a major reason could be IP gets exhausted from the CIDR and pods 
+				- different subnets are created lets say but these are created into diff azs so in each az we will require a network so this network will be termed as the subnetwork inside which the resources will be created
+
+				if ips gets exhausted then 
+			- if space or IPs available in existing vpc CIDR then 	
+				create a new subnet and attach that subnet to the eks 
+			- but what if CIDR does not have enought IPs then create a new vpc with non-overlapping CIDR range and then create a subnet and attach that subnet to the eks 
+			- 
+
+		- external traffic == service networking means we want to create a network so that external traffic can access the pods
+
+		- how to create eks cluster manually via the AWS console 
+		- how to connect to created cluster 
+		- aws eks update_kubeconfig --region regionanme --name clustername
+		- 
+	*  int question 
+			- what are diff pod statuses
+			- pod pending statuses
+				- pending- in this pod objects are created but they are not scheduled on to a node or waiting for getting scheduled
+				- running - pod is created and containers inside the pod are running 
+				- succeded - pod is created and containrs executed successfully 
+				- terminating - pod is deleted 
+				- unknown - pod is created but an unknown error comes which k8s also doesn't knows
+				- failed - pod is created and on of the container is failed to execute
+
+			- first addons are updated then the updation is first executed in lower envs like dev testing 
+			- then control plane is update then the worker nodes are updated 
+			- a latest feature is provided by aws that is we can do a rollback to previous version simply by taking a backup of the eks cluster

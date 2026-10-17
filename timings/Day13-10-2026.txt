@@ -1,0 +1,54 @@
+* Today I revised the previous k8s topics 
+* I spoke for more than one hour by explaining the DevOps concetps in English
+
+
+- create eks cluster using terraform
+			so a terraform code was written which includes several aws services like vpc iam eks istio vpc variables etc are the files inside which the code was written and aws provider was cofigured so that resources could be created into aws cloud and later 
+			terraform plan was ran which basically outputs the plan what is going to be created on cloud provider 
+			then terraform apply was ran and a confirmation was provided this is the actual command which starts the process of provisioning the resources on aws 
+		- how to connect to the eks cluster from local
+			so after creation of the eks cluster we need to authencticate to the eks cluster and we must have an endpoint of the api-server 
+			so there is a /.kube/config file which has all the information like cluster name api-server endpoint what are the clusters we have connected so far list of the users authentication methods like certificates roles or token or any other form of credentials. then there is a context which means which user is mapped with to which  cluster
+			- so first we have to update the kubeconfig locally using aws eks update kubeconfig --region=us-east-1 --cluster=clusterone file then automatically the  
+		- eks update kubeconfig
+		- kubens utility
+			- lets say that there are several namespaces in an eks cluster now as a devops engineer i have to swtich between diff ns more frequently then instead of running command like kubectl config set-context --current --namespace=nsname
+			so instead of writing this command each time we can install a utility names as kubens
+			- and now we can simplly install the kubens and we can run 
+			- kubens namespace 
+			- kubens -c to see current ns
+			- kubens - switch  to previous ns in an cluster 
+
+			
+		- how to connect to ec2 worker node 
+			- so if there is a node in a nodegroup and we have to do ssh then we can simply do ssh -i prikey.pem username@publicIP but this is not a recommended approach in a productions 
+			- instead we have to first login into the system via a admin controls then we have to create a non-root user like pathnex then add that user to the sudoers file by a sudo user like sudo usermod -aG sudo pathnex if required then create a password for pathnex then in the /etc/sshd/sshd.config file we have to update the PasswordAuthencitcation no-->yes so that we can do ssh using the password and furhter we don't have to provide the ssh keys 
+			- though we can use a jumpserver using sessions manager so that we don't even have to do ssh or provide any ssh keys and from that jump server we can do ssh to the worker node on the privateIP and this jump server could be in the public subnet or in private subnet and if it is in private then we have to use vpn from our local system to connect like local--VPN--VPC--PrivateSubnet--Jump_server--PRivateIPWorkernode
+
+		- can we run kubectl from worker node 
+			- yes we can kubectl from worker node if there is kubectl utility installed but we won't get any output because the orchestrator is the master node where all the core components runs 
+		- no we don't have the kubeconfigfile on worker node
+			- this means we do have this kubeconfigfile on our local system to authenticate to api server to see all the information about the different clusters users authenitcation methods, contexts etc.
+		- we cant rename a namespace
+			- we can only create or delete the namesapce it can't be renamed
+		- if the node is unhealthy then pods can terminate
+			- so this was a scenrio created in the lab where a node was made unhealthy intentionaly by rebooting it then all the pods which were evicted 
+			- so how pods are actually evited in real productions during a node maintenance or in a controlled way volunterarily 
+			- so first we have to do kubectl get nodes 
+			- kubectl cordon nodeip 
+			- this means we are  marking the node as unschedulable and no new pods will be scheduled by the scheduler.
+			- then kubectl drain node 
+			- this means we want the pods to be terminated or evicted gracefully 
+			- here gracefully means all the ongoing process or the pods which are currently service will complete their tasks and then after those pods will be terminated so that users will not face sudden app crash.
+			- then after updating the node 
+			- again we will run the kubectl uncordon 
+			- this means now we are marking the node as schedualable and the after getting the status of node as Ready all the pods or workload will be scheduled 
+			- so there comes a PDB which stands for pod distruption budget which means it is a controller which make sures that during any controlled pod eviction process a min number of pods should be up and running if the minAvailable condition is crossed then it will stop the pod eviction process this is used so that at any point of time during pod eviction the application should be up and running without a downtime so lets say there are 10 pods of an app and in PDB we defined minAvailable: 2 then 2 pods will be running all the time so that app could serve the traffic.
+			- these are basically used in maintenance or cluster upgrades OS updates patchign etc simply in controlled scenarios not in uncontrolled scenarios like node failure az failure network disconnections etc.
+			- and labels and selectors are used to discover the pods by the PDB
+		- affinity - low latency 
+			- affinity means affection and if we want that a specific pods or workload should run on a specific node then we can use nodeaffinity rules so there are conditions like hard condition requiredDuringSchedulingIgnoredDuringExecution this means labels and selector will be matched during schd and if a it does not match it wont be schd and later after pod deployment if labels are changed then the pods will not be evicted .
+			- IgnoredduringScheduling means this is soft condition so if the labels and selectors doesn't match and there other scheduling conditions gets fullfilled then pod will be placed.
+			- node antiaffinity -- this means if we dont want to place a specific pods on a specific nodes then we can add this nodeantiaffinity rules 
+			- so by using podaffinity rule we can achieve low latency because two pods will be always placed with each other.
+			- and there is a topology key like kubernetes.io/topology=az or node this means pods will be distributed accross the nodes OR Azs to achieve high availabilty on node level and on AZ level
